@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <div style={{backgroundColor: "black", height: "100vh", marginBottom: "0px"}}>
+        <div style={{height: "80%", width:"80%", backgroundColor:"rgb(50, 50, 50)", marginLeft:"10%", marginTop: "5%", position: "absolute"}}>
+            <App />
+        </div>
+    </div>
   </React.StrictMode>
 );
 
