@@ -2,12 +2,15 @@
 
 This repository contains a React app that interacts with a smart contract, allowing users to mint, stake, and unstake CAT tokens. The app integrates with MetaMask for account management.
 
+The application is deployed using vercel. It can be accessed at : https://redsoft-ui.vercel.app/.
+
 ## Prerequisites
 
 Before getting started, make sure you have the following prerequisites installed on your machine:
 
 - Node.js (version 12 or later)
 - MetaMask extension for your browser
+- A metamask account that has some MATIC on Mumbai Polygon Testnet
 
 ## Installation
 
