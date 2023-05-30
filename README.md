@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# React App README
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains a React app that interacts with a smart contract, allowing users to mint, stake, and unstake CAT tokens. The app integrates with MetaMask for account management.
 
-## Available Scripts
+## Prerequisites
 
-In the project directory, you can run:
+Before getting started, make sure you have the following prerequisites installed on your machine:
 
-### `npm start`
+- Node.js (version 12 or later)
+- MetaMask extension for your browser
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Installation
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Clone this repository to your local machine:
+   ```
+   git clone https://github.com/devprajapat02/redsoft_UI.git
+   ```
 
-### `npm test`
+2. Install the project dependencies:
+   ```
+   cd redsoft_UI
+   npm install
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Building the App
 
-### `npm run build`
+To build the React app, run the following command:
+```
+npm run build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This will generate a production-ready build of the app in the `build` directory.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Start the development server:
+   ```
+   npm start
+   ```
 
-### `npm run eject`
+2. Open your browser and navigate to `http://localhost:3000` to access the app.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Features
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The React app includes the following features:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. **Connect MetaMask Button**: Clicking this button prompts the user to connect their MetaMask account. The app requires a connected MetaMask account to interact with the smart contract.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Mint 5 CAT Button**: Clicking this button triggers a transaction to mint 5 CAT tokens to the user's account. The transaction is signed with the connected MetaMask account.
 
-## Learn More
+3. **Stake Button**: Clicking this button allows the user to stake their CAT tokens. Using the textbox, the user can enter the desired amount of tokens to stake and triggers a transaction to stake the tokens.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. **Unstake Button**: Clicking this button allows the user to unstake all their previously staked CAT tokens.
+5. **Stake Details Section**: This section displays information about the user's current stake, including the staked amount and stake time.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+6. **Error Log Box**: If any errors occur during the interaction with the smart contract, they will be displayed in the error log box.
 
-### Code Splitting
+Feel free to explore and test these features in the React app. Modify the app as per your requirements or add additional functionality based on your needs.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Additional Resources
 
-### Analyzing the Bundle Size
+For more information about React and its features, refer to the official React documentation: [React Documentation](https://reactjs.org/docs)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For information on integrating MetaMask with your React app, refer to the official MetaMask documentation: [MetaMask Docs](https://docs.metamask.io/)
