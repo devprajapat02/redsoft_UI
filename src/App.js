@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 const { ethers } = require("ethers");
-const {abi} = require('./abi.json');
+const abi = require('./abi.json');
 
 function App() {
 
@@ -14,8 +14,14 @@ function App() {
     balance: "0"
   });
 
-  const network = "http://127.0.0.1:7545"
-  const contractAddress = "0x2f3f3FAFbdd8C35688c3b5eDAB6071d3b8D80c0C"
+  const [errorLog, setErrorLog] = useState("Logs...");
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  // const network = "http://127.0.0.1:7545"
+  // const contractAddress = "0x44d517AfC88C7a53d20E17Ec4DD7586c948135DB"
+  const network = "https://rpc-mumbai.maticvigil.com/"
+  const contractAddress = "0x32e2F17ef39636432c22A2dFb41C734402D2db77"
   
   function getTimestamp(timestamp) {
 
@@ -68,14 +74,17 @@ function App() {
     console.log("meta", meta)
   }
 
+  
+
   const handleConnectClick = async () => {
-    console.log("called")
+    setIsLoading(true);
     try {
       // Request access to the user's Ethereum account
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       console.log('Connected to MetaMask!');
       
       const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner();
       const accounts = await provider.listAccounts();
       console.log('Connected account:', accounts[0]);
       
@@ -85,52 +94,84 @@ function App() {
       await fetchMeta(accounts[0]);
           
     } catch (error) {
+      setErrorLog("Error while connecting to metamask! Make sure you have metamask installed and are on the correct network.\nError Log: " + error.toString())
       console.error('Error connecting to MetaMask:', error);
     }
+    setIsLoading(false);
   };
 
   const handleMintClick = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(network);
-    const signer = await provider.getSigner(meta.address);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
-    const signedContract = await contract.connect(signer);
-    const tx = await signedContract.mint(5);
-    await tx.wait();
-    console.log(tx)
-    const balance = await contract.balanceOf(meta.address);
-    setMeta({
-      ...meta,
-      balance: balance.toString()
-    })
-    console.log("minted!", balance.toString())
+    setIsLoading(true);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner(meta.address);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      const signedContract = await contract.connect(signer);
+      const tx = await signedContract.mint(5);
+      await tx.wait();
+      console.log(tx)
+      const balance = await contract.balanceOf(meta.address);
+      setMeta({
+        ...meta,
+        balance: balance.toString()
+      })
+      console.log("minted!", balance.toString())
+    } catch (e) {
+      setErrorLog("Error while minting! Make sure you have connected to metamask.\nError Log: " + e.toString())
+      console.log(e)
+    }
+    setIsLoading(false);
   }
 
   const handleStakeClick = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(network);
-    const signer = await provider.getSigner(meta.address);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
-    const signedContract = await contract.connect(signer);
     const stakeAmount = parseInt(document.getElementById('stakeAmount').value);
-    const tx = await signedContract.stake(stakeAmount);
-    await tx.wait();
-    await fetchMeta(meta.address);
-    console.log("Staked!")
+    if (isNaN(stakeAmount)) {
+      setErrorLog("Error while staking! Make sure you have entered a valid amount.")
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner(meta.address);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      const signedContract = await contract.connect(signer);
+      const tx = await signedContract.stake(stakeAmount);
+      await tx.wait();
+      await fetchMeta(meta.address);
+      console.log("Staked!")
+    } catch (e) {
+      setErrorLog("Error while staking! Make sure you have connected to metamask and have not staked already.\nError Log: " + e.toString())
+      console.log(e)
+    }
+    setIsLoading(false);
   }
 
   const handleUnstakeClick = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(network);
-    const signer = await provider.getSigner(meta.address);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
-    const signedContract = await contract.connect(signer);
-    const tx = await signedContract.unstake();
-    await tx.wait();
-    await fetchMeta(meta.address);
-    console.log("Unstaked!")
+    setIsLoading(true);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner(meta.address);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      const signedContract = await contract.connect(signer);
+      const tx = await signedContract.unstake();
+      await tx.wait();
+      await fetchMeta(meta.address);
+      console.log("Unstaked!")
+    } catch (e) {
+      setErrorLog("Error while unstaking! Make sure you have staked some amount.\nError Log: " + e.toString())
+      console.log(e)
+    }
+    setIsLoading(false);
   }
 
   return (
     <div className="App" style={{height: "100%"}}>
-        <div className='col' style={{height:"20%", width:"90%", marginLeft:"5%", marginTop:"5%"}}>
+      
+      {isLoading? 
+        (<div className='loading_screen'>
+          Loading...
+        </div>):
+        (<div className='col' style={{height:"20%", width:"90%", marginLeft:"5%", marginTop:"5%"}}>
           <div className='row' style={{fontFamily: "Arial", fontSize: "50px", color: "white"}}>
             <div className='col-1'>
               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuqlZCMj6qYaIFylDiB-va9RyPA05ZTV39Rg&usqp=CAU" height="100px" style={{borderRadius: "100px"}} />
@@ -160,20 +201,26 @@ function App() {
                 Stake Amount: {meta.stakeAmount} CAT
               </div>
               <hr />
-              <div className='row' style={{marginLeft: "10px"}}>
-                Stake Time: {meta.stakeTime.days} days {meta.stakeTime.hours} hours {meta.stakeTime.minutes} minutes {meta.stakeTime.seconds} seconds
+              <div className='row' style={{marginLeft: "0px"}}>
+                <div className='col'>
+                  Stake Time: {meta.stakeTime.days} days {meta.stakeTime.hours} hours {meta.stakeTime.minutes} minutes {meta.stakeTime.seconds} seconds
+                </div>
+                <div className='col-2'>
+                  <button className='btn btn-dark' style={{width: "90%"}} onClick={() => {fetchMeta(meta.address)}}>Refresh</button>
+                </div>
             </div>
 
             </div>
           </div>
 
           <div className='row mt-5'>
-            <div className='col-5' style={{paddingLeft: "20%", }}>
-              <button className='btn btn-warning' style={{width: "50%"}} onClick={() => {handleStakeClick()}}>Stake</button>
+            <div className='col-3' style={{paddingLeft: "10%", }}>
+              <button className='btn btn-warning' style={{width: "100%"}} onClick={() => {handleStakeClick()}}>Stake</button>
               {/* text area to input amount to be staked */}
               
             </div>
-            <div className='col-2'>
+            <div className='col-1 text-light mt-1' style={{marginLeft: "30px"}}> Amount: </div>
+            <div className='col-1'>
               <textarea
                 id='stakeAmount'
                 style={{
@@ -190,12 +237,18 @@ function App() {
                 rows={1}
               />
             </div>
-            <div className='col-5' style={{paddingLeft: "20%", }}>
+            <div className='col-6' style={{paddingLeft: "20%", marginLeft: "85px"}}>
               <button className='btn btn-warning' style={{width: "50%"}} onClick={() => {handleUnstakeClick()}}>Unstake</button>
             </div>
           </div>
+
+          <div className='row mt-5'>
+            <div className='col-12' style={{width: "60%", marginLeft: "20%", color: "white", border: "1px solid grey"}}>
+              {errorLog}
+            </div>
+          </div>
           
-        </div>
+        </div>)}
     </div>
   );
 }
