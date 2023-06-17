@@ -4,6 +4,11 @@ This repository contains a React app that interacts with a smart contract, allow
 
 The application is deployed using vercel. It can be accessed at : https://redsoft-ui.vercel.app/.
 
+## Smart Contract
+- Address: 0x32e2F17ef39636432c22A2dFb41C734402D2db77
+- Network: https://rpc-mumbai.maticvigil.com/
+- Github: https://github.com/devprajapat02/truffle_redsoft
+
 ## Prerequisites
 
 Before getting started, make sure you have the following prerequisites installed on your machine:
